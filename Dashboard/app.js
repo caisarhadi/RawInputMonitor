@@ -50,7 +50,11 @@ function connect() {
 
 function renderDeviceList(devices) {
     dashboard.innerHTML = '';
+    const seen = new Set();
     devices.forEach(d => {
+        if (seen.has(d.deviceId)) return;
+        seen.add(d.deviceId);
+
         const card = document.createElement('div');
         card.className = 'device-card';
         card.id = `device-${d.deviceId.replace(':', '-')}`;
