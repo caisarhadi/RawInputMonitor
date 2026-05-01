@@ -15,6 +15,9 @@ class Program
         Console.WriteLine("RawInputMonitor starting...");
 
         var deviceManager = new DeviceManager();
+        var midiManager = new MidiManager(deviceManager);
+        midiManager.Start();
+
         var webRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Dashboard");
         var devPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Dashboard"));
         if (Directory.Exists(devPath))
@@ -44,6 +47,7 @@ class Program
         }
 
         await wsTask;
+        midiManager.Dispose();
         Console.WriteLine("Shutdown complete.");
     }
 }

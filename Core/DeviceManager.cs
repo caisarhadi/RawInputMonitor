@@ -18,12 +18,30 @@ public class DeviceManager
         _profiles.Add(new TangentWaveProfile());
         _profiles.Add(new SpaceMouseProfile());
         _profiles.Add(new SlimbladeProfile());
+        _profiles.Add(new ArturiaBeatStepProProfile());
         RefreshDevices();
     }
 
     public bool TryDequeueEvent(out InputEvent evt)
     {
         return _eventQueue.TryDequeue(out evt);
+    }
+
+    public void EnqueueEvent(InputEvent evt)
+    {
+        _eventQueue.Enqueue(evt);
+    }
+
+    public void RegisterExternalDevice(DeviceInfo info)
+    {
+        lock (_devices)
+        {
+            // Use a random or fake IntPtr for external devices that don't have a RawInput handle
+            IntPtr fakeHandle = new IntPtr(info.GetHashCode());
+            info.DeviceHandle = fakeHandle;
+            _devices[fakeHandle] = info;
+            Console.WriteLine($"[DeviceManager] External Device Registered: {info.ProductName} (Source: {info.SourceType})");
+        }
     }
 
     public IEnumerable<DeviceInfo> GetConnectedDevices()
@@ -71,6 +89,11 @@ public class DeviceManager
                 if (!currentHandles.Contains(key))
                 {
                     var info = _devices[key];
+                    // Don't remove externally registered devices (e.g. MIDI) — 
+                    // they aren't tracked by WM_INPUT and would be falsely disconnected.
+                    if (info.SourceType != "HID" && info.SourceType != "Mouse")
+                        continue;
+
                     info.IsConnected = false;
                     Console.WriteLine($"[DeviceManager] Disconnected: {info.ProductName}");
                     _devices.Remove(key);

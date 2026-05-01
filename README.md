@@ -10,6 +10,7 @@ To avoid duplication, detailed information is split across the following documen
 - **[Tangent Wave 2 Mapping](docs/mapping_docs/tangent_wave_2_mapping.md)**: Full byte-offset and bitmask mapping for the 26-byte vendor-defined HID report.
 - **[Slimblade Pro Mapping](docs/mapping_docs/slimblade_pro_mapping.md)**: Raw input ingestion and channel mapping for the standard mouse-class Slimblade Pro.
 - **[SpaceMouse Mapping](docs/mapping_docs/spacemouse_mapping.md)**: Multi-report HID decoding for 6DOF translation/rotation axes and buttons.
+- **[Arturia BeatStep Pro Mapping](docs/mapping_docs/arturia_beatstep_pro_mapping.md)**: Dual MIDI and raw HID implementation for sequencer controls, pads, and encoders.
 
 ## Core Features
 
@@ -26,6 +27,7 @@ To avoid duplication, detailed information is split across the following documen
 | **Tangent Wave 2** | `04D8:FDCF` | Fully Mapped (Trackballs, Jogwheels, Knobs, Buttons) |
 | **Kensington Slimblade Pro** | `047D:*` | Fully Mapped (Trackball, Twist-Scroll, 4 Buttons) |
 | **3Dconnexion SpaceMouse** | `046D:*` / `256F:*` | Fully Mapped (6DOF Translation, Rotation, Buttons) |
+| **Arturia BeatStep Pro** | `1C75:0287` | Fully Mapped via MIDI (Pads, Encoders, MCU/HUI) and HID Fallback |
 
 ## Known Limitations
 
@@ -34,7 +36,7 @@ To avoid duplication, detailed information is split across the following documen
 ## Future Enhancements
 
 - **Tangent Wave 2 LCD Integration**: Send text strings to the physical OLED displays via `kernel32.dll`.
-- **MIDI Device Support**: Expand the event model to accommodate MIDI input sources alongside HID.
+- **Advanced MIDI Mapping**: Send feedback data to light up the LEDs on the Arturia BeatStep Pro based on application state.
 
 ## Getting Started
 

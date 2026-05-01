@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RawInputMonitor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0444d90497a58091c2aab0c01baf16b6bca6ccae")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8ec99b025e0686f2c08838505cf71a3cf3abef25")]
 [assembly: System.Reflection.AssemblyProductAttribute("RawInputMonitor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RawInputMonitor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
