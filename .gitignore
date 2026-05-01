@@ -1,0 +1,19 @@
+# .NET Core
+bin/
+obj/
+
+# Visual Studio / Visual Studio Code
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Mac OS
+.DS_Store
+
+# Rider
+.idea/
+*.sln.iml
+
+# Logs
+*.log
