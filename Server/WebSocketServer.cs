@@ -140,7 +140,7 @@ public class WebSocketServer
     {
         while (!token.IsCancellationRequested)
         {
-            if (_deviceManager.TryDequeueEvent(out var evt))
+            if (_deviceManager.TryDequeueEvent(out var evt) && evt != null)
             {
                 var msg = new
                 {

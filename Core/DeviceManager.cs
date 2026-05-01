@@ -19,10 +19,11 @@ public class DeviceManager
         _profiles.Add(new SpaceMouseProfile());
         _profiles.Add(new SlimbladeProfile());
         _profiles.Add(new ArturiaBeatStepProProfile());
+        _profiles.Add(new GenericHidProfile());
         RefreshDevices();
     }
 
-    public bool TryDequeueEvent(out InputEvent evt)
+    public bool TryDequeueEvent(out InputEvent? evt)
     {
         return _eventQueue.TryDequeue(out evt);
     }

@@ -223,11 +223,10 @@ Two decode paths: `Decode()` for HID reports (`RAWHID` data), `DecodeMouse()` fo
 #### [NEW] Profiles/GenericHidProfile.cs
 
 - Fallback for any unrecognized HID device
-- Uses `HidP_GetValueCaps` to enumerate all value fields in the report
-- Uses `HidP_GetUsageValue` to extract each value per report
-- Uses `HidP_GetUsages` to extract active buttons
-- Channel names: `"Page{X}:Usage{Y}"` format (e.g., `"GenericDesktop:X"`, `"Button:3"`)
-- This ensures every HID device produces readable output even without a custom profile
+- Compares each incoming raw byte report against the previous state
+- Emits differences as generic byte-level channels (e.g., `"Byte[02]"`)
+- Chosen over `HidP_*` preparsed data parsing to avoid complex unmanaged memory handling and brittle union struct definitions
+- This ensures every HID device produces readable discovery output even without a custom profile
 
 #### [NEW] Profiles/TangentWaveProfile.cs
 
@@ -241,7 +240,7 @@ Two decode paths: `Decode()` for HID reports (`RAWHID` data), `DecodeMouse()` fo
   - **Buttons:** 9× Programmable, 9× Function, 2× Modifier, Individual Reset buttons
 - **Universal Capture:** The decoding logic will be designed to map *all* incoming bytes. Regardless of the control type ingested, any changing bytes in the raw HID report will be systematically captured, decoded, and exposed as generic channels if unmapped.
 - Initial mapping will be built by running RawInputMonitor itself in "raw hex" mode and physically manipulating every single control on the device to map all byte offsets.
-- *Future Phase (LCD Output):* Implement output reports using `kernel32.dll` (`CreateFile` / `WriteFile`) or `HidD_SetOutputReport` to write text to the 3× OLED displays. Requires proprietary driver uninstallation to obtain `GENERIC_WRITE` access.
+- **Pending Future Feature (Tangent Wave 2 LCD Output):** The current RawInputMonitor is Input-only. To send output reports and write text to the 3× LCD screens, we will need to implement `kernel32.dll` (`CreateFile` / `WriteFile`) or use `HidD_SetOutputReport`. Requires proprietary driver uninstallation to obtain `GENERIC_WRITE` access.
 
 #### [NEW] Profiles/SpaceMouseProfile.cs
 
@@ -374,7 +373,7 @@ Phases 3 and 4 can be built in parallel since they have no dependency on each ot
 | Tangent Wave — turn each dial | Named channels (`Dial1`, `Dial2`, etc.) appear with changing values |
 | SpaceMouse — push/pull/twist | `TX`, `TY`, `TZ`, `RX`, `RY`, `RZ` channels show signed values |
 | Slimblade — roll ball, click | `X`, `Y`, `Button1`..`Button4`, `Scroll` channels update |
-| Unknown USB HID device | Appears with generic profile, shows `Page{X}:Usage{Y}` channels |
+| Unknown USB HID device | Appears with generic profile, shows `Byte[N]` channels |
 | Unplug a device | Dashboard shows device as disconnected (red dot) |
 | Replug a device | Dashboard shows device as connected again (green dot) |
 | Open 2 browser tabs | Both receive identical live data |
