@@ -17,3 +17,7 @@ obj/
 
 # Logs
 *.log
+
+# Documentation task files
+docs/done_plans_tasks/
+docs/notes/
