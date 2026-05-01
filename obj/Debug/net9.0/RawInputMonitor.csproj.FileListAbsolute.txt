@@ -1,0 +1,14 @@
+C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\RawInputMonitor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\RawInputMonitor.AssemblyInfoInputs.cache
+C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\RawInputMonitor.AssemblyInfo.cs
+C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\RawInputMonitor.csproj.CoreCompileInputs.cache
+C:\Users\CaesarProM\Documents\RawInputMonitor\bin\Debug\net9.0\RawInputMonitor.exe
+C:\Users\CaesarProM\Documents\RawInputMonitor\bin\Debug\net9.0\RawInputMonitor.deps.json
+C:\Users\CaesarProM\Documents\RawInputMonitor\bin\Debug\net9.0\RawInputMonitor.runtimeconfig.json
+C:\Users\CaesarProM\Documents\RawInputMonitor\bin\Debug\net9.0\RawInputMonitor.dll
+C:\Users\CaesarProM\Documents\RawInputMonitor\bin\Debug\net9.0\RawInputMonitor.pdb
+C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\RawInputMonitor.dll
+C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\refint\RawInputMonitor.dll
+C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\RawInputMonitor.pdb
+C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\RawInputMonitor.genruntimeconfig.cache
+C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\ref\RawInputMonitor.dll
