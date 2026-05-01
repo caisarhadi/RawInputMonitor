@@ -12,3 +12,4 @@ C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\refint\RawInputMo
 C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\RawInputMonitor.pdb
 C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\RawInputMonitor.genruntimeconfig.cache
 C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\ref\RawInputMonitor.dll
+C:\Users\CaesarProM\Documents\RawInputMonitor\obj\Debug\net9.0\RawInputMonitor.sourcelink.json

@@ -9,6 +9,7 @@ To avoid duplication, detailed information is split across the following documen
 - **[Architecture Overview](docs/architecture.md)**: Details the Win32 message pump, threading model, and core components.
 - **[Tangent Wave 2 Mapping](docs/mapping_docs/tangent_wave_2_mapping.md)**: Full byte-offset and bitmask mapping for the 26-byte vendor-defined HID report.
 - **[Slimblade Pro Mapping](docs/mapping_docs/slimblade_pro_mapping.md)**: Raw input ingestion and channel mapping for the standard mouse-class Slimblade Pro.
+- **[SpaceMouse Mapping](docs/mapping_docs/spacemouse_mapping.md)**: Multi-report HID decoding for 6DOF translation/rotation axes and buttons.
 
 ## Core Features
 
@@ -24,7 +25,7 @@ To avoid duplication, detailed information is split across the following documen
 |--------|---------|--------|
 | **Tangent Wave 2** | `04D8:FDCF` | Fully Mapped (Trackballs, Jogwheels, Knobs, Buttons) |
 | **Kensington Slimblade Pro** | `047D:*` | Fully Mapped (Trackball, Twist-Scroll, 4 Buttons) |
-| **3Dconnexion SpaceMouse** | `046D:*` / `256F:*` | Pending |
+| **3Dconnexion SpaceMouse** | `046D:*` / `256F:*` | Fully Mapped (6DOF Translation, Rotation, Buttons) |
 
 ## Known Limitations
 

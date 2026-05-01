@@ -16,6 +16,7 @@ public class DeviceManager
     public DeviceManager()
     {
         _profiles.Add(new TangentWaveProfile());
+        _profiles.Add(new SpaceMouseProfile());
         _profiles.Add(new SlimbladeProfile());
         RefreshDevices();
     }

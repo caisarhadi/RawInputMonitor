@@ -2,6 +2,28 @@ let ws;
 const dashboard = document.getElementById('dashboard');
 const statusDiv = document.getElementById('status');
 
+// Define display order for known channels so they always appear in a logical sequence
+const CHANNEL_ORDER = {
+    // SpaceMouse 6DOF
+    'TX': 10, 'TY': 11, 'TZ': 12,
+    'RX': 13, 'RY': 14, 'RZ': 15,
+    // SpaceMouse Buttons
+    'Button_1': 20, 'Button_2': 21, 'Button_3': 22, 'Button_4': 23,
+    // Slimblade
+    'X': 30, 'Y': 31, 'Twist_Scroll': 32,
+    'Button_BottomLeft': 40, 'Button_BottomRight': 41,
+    'Button_TopLeft': 42, 'Button_TopRight': 43, 'Button_Extra': 44,
+};
+
+function getChannelOrder(channel) {
+    if (CHANNEL_ORDER[channel] !== undefined) return CHANNEL_ORDER[channel];
+    // For numbered buttons (Button_5, Button_6, etc.), parse the number
+    const btnMatch = channel.match(/^Button_(\d+)$/);
+    if (btnMatch) return 20 + parseInt(btnMatch[1]);
+    // Unknown channels go to the end, sorted alphabetically
+    return 900;
+}
+
 function connect() {
     ws = new WebSocket('ws://localhost:9100/ws');
 
@@ -71,12 +93,26 @@ function updateInput(input) {
         row = document.createElement('div');
         row.className = 'channel-row';
         row.id = channelId;
+        row.dataset.channel = input.channel;
         row.innerHTML = `
             <span class="channel-name">${input.channel}</span>
             <span class="channel-value" id="val-${channelId}">0</span>
             <span class="channel-raw" id="raw-${channelId}" style="font-size: 0.8em; color: #666; margin-left: 15px;">[Raw: 0]</span>
         `;
-        container.appendChild(row);
+
+        // Insert in sorted order based on a defined channel priority
+        const order = getChannelOrder(input.channel);
+        row.dataset.order = order;
+        let inserted = false;
+        for (const child of container.children) {
+            if (child.classList.contains('channel-group-title')) continue;
+            if (parseInt(child.dataset.order) > order) {
+                container.insertBefore(row, child);
+                inserted = true;
+                break;
+            }
+        }
+        if (!inserted) container.appendChild(row);
     }
 
     const valEl = document.getElementById(`val-${channelId}`);
