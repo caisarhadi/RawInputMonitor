@@ -1,28 +1,43 @@
 # RawInputMonitor
 
-A high-performance, ground-up C# application designed to capture **all** Human Interface Device (HID) input reports via the Windows Raw Input API. It bypasses OS-level exclusive access conflicts, decodes raw reports into human-readable channels, and streams them to a real-time browser dashboard over WebSockets.
+A high-performance, zero-dependency C# .NET 8 application designed to capture raw Human Interface Device (HID) input directly via the Windows Raw Input API. It bypasses OS-level exclusive access conflicts, decodes raw reports into normalized channels, and streams them to a real-time browser dashboard over WebSockets.
+
+## Project Documentation
+
+To avoid duplication, detailed information is split across the following documents:
+
+- **[Architecture Overview](docs/architecture.md)**: Details the Win32 message pump, threading model, and core components.
+- **[Tangent Wave 2 Mapping](docs/mapping_docs/tangent_wave_2_mapping.md)**: Full byte-offset and bitmask mapping for the 26-byte vendor-defined HID report.
+- **[Slimblade Pro Mapping](docs/mapping_docs/slimblade_pro_mapping.md)**: Raw input ingestion and channel mapping for the standard mouse-class Slimblade Pro.
 
 ## Core Features
-- **Zero-Driver Dependency**: Interfaces directly with `user32.dll` and `hid.dll` using pure Win32 P/Invoke.
-- **Hardware Agnostic**: Monitors generic HID devices by default, automatically identifying buttons and axes.
-- **Custom Device Profiles**: Specifically tailored decoding profiles for professional hardware (e.g., Tangent Wave 2, 3Dconnexion SpaceMouse).
-- **Bit-Level Ingestion**: Dynamically parses bitmasks to isolate and identify exact button inputs encoded within raw bytes.
-- **Real-Time Web Dashboard**: A zero-configuration HTML/JS interface that visualizes hardware data streams via WebSockets (`localhost:9100`).
 
-## Architecture
-- **Win32 Message Pump**: A hidden window captures `WM_INPUT` efficiently without requiring window focus.
-- **Device Manager**: Enumerates devices, handles hot-plugging, and routes data.
-- **Profile Decoder**: Converts raw hex arrays into normalized `InputEvent` records.
-- **WebSocket Broadcaster**: Streams event JSON to connected web clients.
+- **Zero-Driver Dependency**: Interfaces directly with `user32.dll` and `hid.dll` using pure Win32 P/Invoke.
+- **Hardware Agnostic**: Monitors generic HID devices by default, dynamically parsing bitmasks to isolate and identify buttons and axes.
+- **Custom Device Profiles**: Specifically tailored decoding profiles for professional hardware to map vendor-defined byte offsets.
+- **Bit-Level Ingestion**: Dynamically parses bitmasks to isolate and identify exact button inputs encoded within raw bytes.
+- **Real-Time Web Dashboard**: A zero-configuration HTML/JS interface that visualizes hardware data streams via WebSockets (`ws://localhost:9100`).
 
 ## Supported Devices
-- [x] **Tangent Wave 2** (`04D8:FDCF`): Fully mapped (Trackballs, Jogwheels, Rotary Knobs, 32 Buttons).
-- [x] **Kensington Slimblade Pro** (`047D:*`): Fully mapped (Trackball, Twist-Scroll, 4 Buttons).
-- [ ] **3Dconnexion SpaceMouse**: Pending.
 
-## Hardware Configuration Notes
-### Mouse Cursor Suppression (HidHide)
-Devices that act as standard mice (like the Slimblade Pro) will naturally move the Windows OS cursor. To suppress this behavior while allowing `RawInputMonitor` to read the data, use the **HidHide** driver to hide the device from the OS, and whitelist `RawInputMonitor.exe` in the HidHide configuration.
+| Device | VID:PID | Status |
+|--------|---------|--------|
+| **Tangent Wave 2** | `04D8:FDCF` | Fully Mapped (Trackballs, Jogwheels, Knobs, Buttons) |
+| **Kensington Slimblade Pro** | `047D:*` | Fully Mapped (Trackball, Twist-Scroll, 4 Buttons) |
+| **3Dconnexion SpaceMouse** | `046D:*` / `256F:*` | Pending |
 
-### Future Enhancements
-- **Tangent Wave 2 LCD Integration**: To send text strings to the Tangent's physical LCD displays, a future update will utilize `kernel32.dll` (`CreateFile` / `WriteFile`) to stream "Output Reports" to the device handle acquired by the `DeviceManager`. (Requires proprietary driver uninstallation to obtain `GENERIC_WRITE` access).
+## Known Limitations
+
+- **OS Cursor Movement**: Standard mouse-class devices (e.g., the Slimblade Pro) inherently move the Windows OS cursor. This behavior cannot be cleanly suppressed via the Raw Input API without disabling legacy mouse input system-wide. The application will successfully capture the raw data, but the system cursor will still track the movement.
+
+## Future Enhancements
+
+- **Tangent Wave 2 LCD Integration**: Send text strings to the physical OLED displays via `kernel32.dll`.
+- **MIDI Device Support**: Expand the event model to accommodate MIDI input sources alongside HID.
+
+## Getting Started
+
+1. Clone this repository.
+2. Build the project using the .NET 8 SDK: `dotnet build`.
+3. Run the executable.
+4. Open `http://localhost:9100` in your web browser to access the live dashboard.

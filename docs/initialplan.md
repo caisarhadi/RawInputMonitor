@@ -269,8 +269,8 @@ Two decode paths: `Decode()` for HID reports (`RAWHID` data), `DecodeMouse()` fo
 - **Twist-to-Scroll:** The trackball's vertical twist rotation is reported natively as standard mouse `Wheel` (scroll) delta (`WHEEL_DELTA`=120) by the hardware sensors. We normalize this to 1/-1.
 - Produces channels: `X`, `Y`, `Button_BottomLeft`, `Button_BottomRight`, `Button_TopLeft`, `Button_TopRight`, `Twist_Scroll`
 
-> [!TIP]
-> **Cursor Suppression (HidHide)**: Because this is a standard mouse, it moves the OS cursor. Using the Raw Input `RIDEV_NOLEGACY` flag disables all mice on the system, which is bad. The professional solution is to use the **HidHide** kernel driver to hide the Kensington device from the OS, while whitelisting `RawInputMonitor.exe` so we can still read the raw input without moving the cursor.
+> [!NOTE]
+> **Cursor Movement Limitation**: As a standard mouse-class device, the Slimblade Pro natively moves the OS cursor. This hardware behavior cannot be suppressed via Raw Input without disabling legacy mouse input system-wide.
 
 ---
 
