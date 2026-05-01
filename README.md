@@ -1,6 +1,6 @@
 # RawInputMonitor
 
-A high-performance, zero-dependency C# .NET 8 application designed to capture raw Human Interface Device (HID) input directly via the Windows Raw Input API. It bypasses OS-level exclusive access conflicts, decodes raw reports into normalized channels, and streams them to a real-time browser dashboard over WebSockets.
+A high-performance, zero-dependency C# .NET 9 application designed to capture raw Human Interface Device (HID) input directly via the Windows Raw Input API. It bypasses OS-level exclusive access conflicts, decodes raw reports into normalized channels, and streams them to a real-time browser dashboard over WebSockets.
 
 ## Project Documentation
 
@@ -41,6 +41,6 @@ To avoid duplication, detailed information is split across the following documen
 ## Getting Started
 
 1. Clone this repository.
-2. Build the project using the .NET 8 SDK: `dotnet build`.
+2. Build the project using the .NET 9 SDK: `dotnet build`.
 3. Run the executable.
 4. Open `http://localhost:9100` in your web browser to access the live dashboard.

@@ -116,7 +116,7 @@ When a step button is pressed, its LED lights up and all other step button LEDs 
 
 ### How it works
 
-The BeatStep Pro accepts incoming Note On/Off messages to control LED state on both ports:
+The BeatStep Pro accepts incoming Note On/Off messages to control LED state on Port 1 (MCU mode):
 - **Note On velocity 127** → LED on
 - **Note On velocity 0** (or Note Off) → LED off
 
@@ -141,8 +141,8 @@ public static extern uint midiOutClose(IntPtr hMidiOut);
 ```
 
 #### 2. Open MIDI output device in `MidiManager.Start()`
-- Enumerate `midiOutGetNumDevs()`, match "Arturia BeatStep Pro" and "MIDIOUT2"
-- Open both output ports
+- Enumerate `midiOutGetNumDevs()`, match "MIDIOUT2 (Arturia BeatStep Pro)"
+- Open Port 1 output handle (`_outPort1Handle`)
 
 #### 3. Scene LED logic in `MidiCallback`
 When a step button message is received:
