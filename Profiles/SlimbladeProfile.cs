@@ -7,11 +7,10 @@ namespace RawInputMonitor.Profiles;
 
 public class SlimbladeProfile : IDeviceProfile
 {
-    public string FriendlyName => "Kensington Slimblade Pro";
 
     public bool CanHandle(ushort vendorId, ushort productId)
     {
-        return vendorId == 0x047D; // We catch all Kensington devices for now, or you can refine the PID later
+        return vendorId == 0x047D && productId == 0x80D4;
     }
 
     public IEnumerable<InputEvent> Decode(byte[] report, int count, DeviceInfo device)

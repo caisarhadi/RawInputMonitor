@@ -126,7 +126,19 @@ public static class RawInputInterop
     }
 
     public const uint RIM_TYPEHID = 2;
+    public const uint RIM_TYPEKEYBOARD = 1;
     public const uint RIM_TYPEMOUSE = 0;
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RAWKEYBOARD
+    {
+        public ushort MakeCode;
+        public ushort Flags;
+        public ushort Reserved;
+        public ushort VKey;
+        public uint Message;
+        public uint ExtraInformation;
+    }
     
     [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
     public static extern IntPtr CreateWindowEx(

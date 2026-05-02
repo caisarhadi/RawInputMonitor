@@ -6,7 +6,6 @@ namespace RawInputMonitor.Profiles;
 
 public class TangentWaveProfile : IDeviceProfile
 {
-    public string FriendlyName => "Tangent Wave 2";
 
     public bool CanHandle(ushort vendorId, ushort productId)
     {

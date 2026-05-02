@@ -7,7 +7,6 @@ namespace RawInputMonitor.Profiles;
 
 public class ArturiaBeatStepProProfile : IDeviceProfile
 {
-    public string FriendlyName => "Arturia BeatStep Pro";
 
     // Arturia VID is 1C75. PID varies but 0289 is common. We match VID only.
     public bool CanHandle(ushort vendorId, ushort productId)

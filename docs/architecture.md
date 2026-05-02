@@ -9,7 +9,7 @@ graph TB
     subgraph "Physical Devices"
         TW["Tangent Wave 2<br/>04D8:FDCF"]
         SM["SpaceMouse<br/>046D:* / 256F:*"]
-        SB["Slimblade Pro<br/>047D:*"]
+        SB["Slimblade Pro<br/>047D:80D4"]
         AB["Arturia BeatStep Pro<br/>1C75:0287"]
     end
 
@@ -50,5 +50,5 @@ graph TB
 - **Win32 Message Pump**: A hidden window (`MessageWindow.cs`) registers for raw input and captures `WM_INPUT` efficiently without requiring window focus.
 - **Device Manager**: Enumerates HID devices on startup, handles hot-plugging, routes `RAWHID` or `RAWMOUSE` payloads to the correct profile, and accepts externally registered MIDI devices.
 - **MIDI Manager**: Opens MIDI input/output ports via `winmm.dll` P/Invoke. Decodes short messages (Note On/Off, CC, Pitch Bend, Transport) and SysEx long messages. Sends Note On feedback for LED control.
-- **Profile Decoder**: Converts raw hex arrays into normalized `InputEvent` records. Specific profiles (like `TangentWaveProfile`) handle vendor-defined mappings. Unmatched devices are silently skipped.
+- **Profile Decoder**: Converts raw hex arrays into normalized `InputEvent` records. Specific profiles (like `TangentWaveProfile`) handle vendor-defined mappings. Unmatched HID devices are handled by a generic fallback profile.
 - **WebSocket Broadcaster**: Streams the decoded event JSON to connected web clients for real-time visualization.

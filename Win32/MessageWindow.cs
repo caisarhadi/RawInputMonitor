@@ -51,7 +51,7 @@ public class MessageWindow : IDisposable
             });
         }
         
-        AddDevice(0x01, 0x02); // Mouse (for Slimblade eventually)
+        AddDevice(0x01, 0x02); // Mouse
         AddDevice(0x01, 0x04); // Joystick
         AddDevice(0x01, 0x05); // Gamepad
         AddDevice(0x01, 0x08); // Multi-axis

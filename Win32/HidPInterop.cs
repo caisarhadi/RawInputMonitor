@@ -31,4 +31,22 @@ public static class HidPInterop
     public static extern int HidP_GetCaps(
         IntPtr PreparsedData,
         out HIDP_CAPS Capabilities);
+
+    [DllImport("hid.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern bool HidD_GetProductString(IntPtr HidDeviceObject, byte[] Buffer, int BufferLength);
+
+
+
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    public static extern IntPtr CreateFile(
+        string lpFileName,
+        uint dwDesiredAccess,
+        uint dwShareMode,
+        IntPtr lpSecurityAttributes,
+        uint dwCreationDisposition,
+        uint dwFlagsAndAttributes,
+        IntPtr hTemplateFile);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern bool CloseHandle(IntPtr hObject);
 }

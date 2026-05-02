@@ -79,8 +79,39 @@ public class DeviceManager
                     var info = LoadDeviceInfo(dev.hDevice);
                     if (info != null)
                     {
+                        // Sibling Name Sharing: If this endpoint got a generic name, but another endpoint 
+                        // of the same physical device has a real name, copy it.
+                        if (PnpDeviceResolver.IsGenericName(info.ProductName))
+                        {
+                            var sibling = _devices.Values.FirstOrDefault(d => 
+                                d.VendorId == info.VendorId && 
+                                d.ProductId == info.ProductId && 
+                                !PnpDeviceResolver.IsGenericName(d.ProductName));
+                                
+                            if (sibling != null)
+                            {
+                                info.ProductName = sibling.ProductName;
+                            }
+                        }
+
                         _devices[dev.hDevice] = info;
                         Console.WriteLine($"[DeviceManager] Connected: {info.ProductName} (VID: {info.VendorId:X4}, PID: {info.ProductId:X4})");
+
+                        // Retroactive Sharing: If this new endpoint just brought in a real name, 
+                        // upgrade any already-connected generic siblings.
+                        if (!PnpDeviceResolver.IsGenericName(info.ProductName))
+                        {
+                            foreach (var existing in _devices.Values)
+                            {
+                                if (existing.VendorId == info.VendorId && 
+                                    existing.ProductId == info.ProductId && 
+                                    PnpDeviceResolver.IsGenericName(existing.ProductName))
+                                {
+                                    Console.WriteLine($"[DeviceManager] Upgraded generic sibling name to: {info.ProductName}");
+                                    existing.ProductName = info.ProductName;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -143,13 +174,26 @@ public class DeviceManager
         var ridi = Marshal.PtrToStructure<RawInputInterop.RID_DEVICE_INFO>(infoPtr);
         Marshal.FreeHGlobal(infoPtr);
 
-        if (ridi.dwType != RawInputInterop.RIM_TYPEHID && ridi.dwType != RawInputInterop.RIM_TYPEMOUSE) 
+        // === FILTERS ===
+        // Only accept HID devices — reject keyboards and mice entirely unless a specific profile claims them
+        if (ridi.dwType == RawInputInterop.RIM_TYPEKEYBOARD)
+            return null;
+        if (ridi.dwType != RawInputInterop.RIM_TYPEHID && ridi.dwType != RawInputInterop.RIM_TYPEMOUSE)
+            return null;
+
+        // Reject virtual/phantom devices
+        if (vid == 0x0000 || vid == 0xBEEF)
             return null;
 
         if (ridi.dwType == RawInputInterop.RIM_TYPEHID)
         {
             if (vid == 0) vid = (ushort)ridi.hid.dwVendorId;
             if (pid == 0) pid = (ushort)ridi.hid.dwProductId;
+
+            // Reject consumer control (media keys) and monitor control endpoints
+            ushort usagePage = ridi.hid.usUsagePage;
+            if (usagePage == 0x0C || usagePage == 0x80)
+                return null;
         }
 
         var info = new DeviceInfo
@@ -160,20 +204,34 @@ public class DeviceManager
             ProductId = pid,
         };
 
-        // Resolve profile
+        // Resolve profile - specific profiles first, GenericHidProfile is the fallback
         foreach (var profile in _profiles)
         {
             if (profile.CanHandle(info.VendorId, info.ProductId))
             {
                 info.Profile = profile;
-                info.ProductName = profile.FriendlyName;
                 break;
             }
         }
 
+        // For mice: only accept if a specific (non-generic) profile matched.
+        // This keeps Slimblade but drops random mice, audio interfaces, etc.
+        if (ridi.dwType == RawInputInterop.RIM_TYPEMOUSE && info.Profile is GenericHidProfile)
+            return null;
+
+        // Attempt to read the real device name from the USB product string descriptor (works for standard HID like Wave2)
+        info.ProductName = ReadUsbProductName(devicePath) ?? string.Empty;
+
+        // Fallback to PnP subsystem if Windows blocked USB access (Mice/Keyboards) or name is empty
         if (string.IsNullOrEmpty(info.ProductName))
         {
-            info.ProductName = $"Unknown HID ({info.VendorId:X4}:{info.ProductId:X4})";
+            info.ProductName = PnpDeviceResolver.GetDeviceNameFromPath(devicePath) ?? string.Empty;
+        }
+
+        // Final fallback
+        if (string.IsNullOrEmpty(info.ProductName))
+        {
+            info.ProductName = $"HID Device ({vid:X4}:{pid:X4})";
         }
 
         return info;
@@ -236,5 +294,53 @@ public class DeviceManager
         }
 
         Marshal.FreeHGlobal(dataPtr);
+    }
+
+    /// <summary>
+    /// Opens the HID device by path and reads its real USB product string descriptor.
+    /// Returns null if the device cannot be opened or has no product string.
+    /// </summary>
+    private static string? ReadUsbProductName(string devicePath)
+    {
+        try
+        {
+            const uint GENERIC_READ = 0x80000000;
+            const uint FILE_SHARE_READ = 0x01;
+            const uint FILE_SHARE_WRITE = 0x02;
+            const uint OPEN_EXISTING = 3;
+            IntPtr INVALID_HANDLE = new IntPtr(-1);
+
+            var handle = HidPInterop.CreateFile(
+                devicePath,
+                GENERIC_READ,
+                FILE_SHARE_READ | FILE_SHARE_WRITE,
+                IntPtr.Zero,
+                OPEN_EXISTING,
+                0,
+                IntPtr.Zero);
+
+            if (handle == INVALID_HANDLE || handle == IntPtr.Zero)
+                return null;
+
+            try
+            {
+                byte[] buf = new byte[256];
+                if (HidPInterop.HidD_GetProductString(handle, buf, buf.Length))
+                {
+                    string name = System.Text.Encoding.Unicode.GetString(buf).TrimEnd('\0').Trim();
+                    if (!string.IsNullOrEmpty(name))
+                        return name;
+                }
+            }
+            finally
+            {
+                HidPInterop.CloseHandle(handle);
+            }
+        }
+        catch
+        {
+            // Silently fail — device may not support product strings
+        }
+        return null;
     }
 }

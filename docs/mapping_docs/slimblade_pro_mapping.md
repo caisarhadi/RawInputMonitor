@@ -1,4 +1,4 @@
-# Kensington Slimblade Pro (`047D:*`) Mapping & Decoding
+# Kensington Slimblade Pro (`047D:80D4`) Mapping & Decoding
 
 This document serves as the permanent record for how the Slimblade Pro's raw mouse input is handled within the `RawInputMonitor` broker.
 
@@ -19,7 +19,7 @@ The device emits standard relative mouse movement and standard bitwise button fl
 *Velocity Note*: Unlike proprietary jogwheels that accumulate velocity dynamically, the Slimblade acts as a standard mouse wheel. It natively emits rapid streams of delta events (`WHEEL_DELTA` = `120` or `-120`). Our decoder normalizes this by dividing by `120.0`.
 
 ### Discrete Controls (Buttons)
-The 4 physical hardware buttons map to the `usButtonFlags` bitmask. When pressed (Down), they output `1`. When released (Up), they output `0`.
+The 5 physical hardware buttons map to the `usButtonFlags` bitmask. When pressed (Down), they output `1`. When released (Up), they output `0`.
 
 | Physical Button | Raw Input Flag (`usButtonFlags`) | Hex Mask (Down / Up) | Decoded Channel | Decoded Value |
 |-----------------|----------------------------------|----------------------|-----------------|---------------|
@@ -27,4 +27,5 @@ The 4 physical hardware buttons map to the `usButtonFlags` bitmask. When pressed
 | **Bottom Right**| `RI_MOUSE_RIGHT_BUTTON`| `0x0004` / `0x0008` | `Button_BottomRight`| `1` (Down), `0` (Up) |
 | **Top Left**    | `RI_MOUSE_MIDDLE_BUTTON` (Button 3) | `0x0010` / `0x0020` | `Button_TopLeft` | `1` (Down), `0` (Up) |
 | **Top Right**   | `RI_MOUSE_BUTTON_4` (Back Button) | `0x0040` / `0x0080` | `Button_TopRight` | `1` (Down), `0` (Up) |
+| **Extra**       | `RI_MOUSE_BUTTON_5` (Forward Button) | `0x0100` / `0x0200` | `Button_Extra` | `1` (Down), `0` (Up) |
 

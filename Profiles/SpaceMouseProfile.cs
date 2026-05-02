@@ -12,7 +12,6 @@ namespace RawInputMonitor.Profiles;
 /// </summary>
 public class SpaceMouseProfile : IDeviceProfile
 {
-    public string FriendlyName => "3Dconnexion SpaceMouse";
 
     // Known 3Dconnexion PIDs for targeted matching
     private static readonly HashSet<ushort> _knownPids = new()

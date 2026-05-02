@@ -14,7 +14,7 @@ To avoid duplication, detailed information is split across the following documen
 
 ## Core Features
 
-- **Zero-Driver Dependency**: Interfaces directly with `user32.dll` and `hid.dll` using pure Win32 P/Invoke.
+- **Zero-Driver Dependency**: Interfaces directly with `user32.dll`, `hid.dll`, `setupapi.dll`, and `kernel32.dll` using pure Win32 P/Invoke.
 - **Hardware Agnostic**: Monitors generic HID devices by default, dynamically parsing bitmasks to isolate and identify buttons and axes.
 - **Custom Device Profiles**: Specifically tailored decoding profiles for professional hardware to map vendor-defined byte offsets.
 - **Bit-Level Ingestion**: Dynamically parses bitmasks to isolate and identify exact button inputs encoded within raw bytes.
@@ -25,7 +25,7 @@ To avoid duplication, detailed information is split across the following documen
 | Device | VID:PID | Status |
 |--------|---------|--------|
 | **Tangent Wave 2** | `04D8:FDCF` | Fully Mapped (Trackballs, Jogwheels, Knobs, Buttons) |
-| **Kensington Slimblade Pro** | `047D:*` | Fully Mapped (Trackball, Twist-Scroll, 4 Buttons) |
+| **Kensington Slimblade Pro** | `047D:80D4` | Fully Mapped (Trackball, Twist-Scroll, 5 Buttons) |
 | **3Dconnexion SpaceMouse** | `046D:*` / `256F:*` | Fully Mapped (6DOF Translation, Rotation, Buttons) |
 | **Arturia BeatStep Pro** | `1C75:0287` | Fully Mapped via MIDI (Pads, Encoders, MCU/HUI) and HID Fallback |
 

@@ -20,6 +20,7 @@ This document serves as the permanent record for how the SpaceMouse's raw HID da
 | `C627` | SpaceExplorer |
 | `C628` | SpaceNavigator for Notebooks |
 | `C629` | SpacePilot Pro |
+| `C62A` | Legacy 3Dconnexion |
 | `C62B` | SpaceMouse Pro |
 | `C631` | SpaceMouse Pro Wireless (USB) |
 | `C632` | SpaceMouse Pro Wireless Receiver |

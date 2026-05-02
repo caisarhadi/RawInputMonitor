@@ -6,7 +6,6 @@ namespace RawInputMonitor.Profiles;
 
 public interface IDeviceProfile
 {
-    string FriendlyName { get; }
     bool CanHandle(ushort vendorId, ushort productId);
     
     // For standard HID reports
@@ -14,4 +13,6 @@ public interface IDeviceProfile
     
     // For Mouse-class reports (like Slimblade)
     IEnumerable<InputEvent>? DecodeMouse(RawInputMonitor.Win32.RawInputInterop.RAWMOUSE mouse, DeviceInfo device) => null;
+
+
 }
