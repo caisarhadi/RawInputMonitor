@@ -17,6 +17,7 @@ obj/
 
 # Logs
 *.log
+mapping_log.txt
 
 # Documentation task files
 docs/done_plans_tasks/
