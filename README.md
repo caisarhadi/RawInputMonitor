@@ -36,7 +36,6 @@ To avoid duplication, detailed information is split across the following documen
 ## Future Enhancements
 
 - **Tangent Wave 2 LCD Integration**: Send text strings to the physical OLED displays via `kernel32.dll`.
-- **Advanced MIDI Mapping**: Send feedback data to light up the LEDs on the Arturia BeatStep Pro based on application state.
 
 ## Getting Started
 
